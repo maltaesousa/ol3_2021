@@ -15,10 +15,11 @@
       height: 600px;
       width: 100%;
     }
+
     .ol-popup {
       position: absolute;
       background-color: white;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
       padding: 15px;
       border-radius: 10px;
       border: 1px solid #cccccc;
@@ -26,7 +27,9 @@
       left: -50px;
       min-width: 280px;
     }
-    .ol-popup:after, .ol-popup:before {
+
+    .ol-popup:after,
+    .ol-popup:before {
       top: 100%;
       border: solid transparent;
       content: " ";
@@ -35,24 +38,28 @@
       position: absolute;
       pointer-events: none;
     }
+
     .ol-popup:after {
       border-top-color: white;
       border-width: 10px;
       left: 48px;
       margin-left: -10px;
     }
+
     .ol-popup:before {
       border-top-color: #cccccc;
       border-width: 11px;
       left: 48px;
       margin-left: -11px;
     }
+
     .ol-popup-closer {
       text-decoration: none;
       position: absolute;
       top: 2px;
       right: 8px;
     }
+
     .ol-popup-closer:after {
       content: "✖";
     }
@@ -75,15 +82,18 @@
     </ul>
     </p>
     <div class="custom-control custom-radio">
-      <input type="radio" id="heigvd-campus1" name="heigvdRadio" class="custom-control-input" value='cheseaux' onClick='changeFocus()'>
+      <input type="radio" id="heigvd-campus1" name="heigvdRadio" class="custom-control-input" value='cheseaux'
+        onClick='changeFocus()'>
       <label class="custom-control-label" for="heigvd-campus1">Cheseaux</label>
     </div>
     <div class="custom-control custom-radio">
-      <input type="radio" id="heigvd-campus2" name="heigvdRadio" class="custom-control-input" value='st_roch' onClick='changeFocus()'>
+      <input type="radio" id="heigvd-campus2" name="heigvdRadio" class="custom-control-input" value='st_roch'
+        onClick='changeFocus()'>
       <label class="custom-control-label" for="heigvd-campus2">St-Roch</label>
     </div>
     <div class="custom-control custom-radio">
-      <input type="radio" id="heigvd-campus3" name="heigvdRadio" class="custom-control-input" value='y_parc' onClick='changeFocus()'>
+      <input type="radio" id="heigvd-campus3" name="heigvdRadio" class="custom-control-input" value='y_parc'
+        onClick='changeFocus()'>
       <label class="custom-control-label" for="heigvd-campus3">Y-Parc</label>
     </div>
     <div id="map"></div>
@@ -104,13 +114,13 @@
 <script>
 
   // constante de facteur d'echelle pour la sensibilite de selection
-  const sensiSelect = 20
-  
+  const sensiSelect = 20;
+
   // definition de la projection suisse
   proj4.defs(
     "EPSG:2056",
     "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs"
-    );
+  );
   ol.proj.proj4.register(proj4);
 
   // parametre de la couche de fond
@@ -123,12 +133,12 @@
 
   // Style de la couche
   const style = new ol.style.Style({
-      image: new ol.style.Circle({
-        radius: 10,
-        fill: new ol.style.Fill({color: 'rgba(255, 255, 255, 0.9)'}),
-        stroke: new ol.style.Stroke({color: 'rgba(255, 0, 0, 1)', width: 3}),
-      })
-    });
+    image: new ol.style.Circle({
+      radius: 10,
+      fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.9)' }),
+      stroke: new ol.style.Stroke({ color: 'rgba(255, 0, 0, 1)', width: 3 }),
+    })
+  });
 
   // Couches vectorielles
   const vectorLayer = new ol.layer.Vector({
@@ -136,7 +146,7 @@
   });
   const geojsonSource = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
-    url: "ol-3_popup.geojson"
+    url: "../data/ol-3_popup.geojson"
   });
   vectorLayer.setSource(geojsonSource);
 
@@ -162,7 +172,7 @@
   // creation de la carte
   const map = new ol.Map({
     target: "map",
-    layers: [backgroundLayer,vectorLayer],
+    layers: [backgroundLayer, vectorLayer],
     view: view,
     overlays: [overlay],
 
@@ -177,26 +187,31 @@
     view.setZoom(18);
   };
 
-  // action lors du clic sur un objet
+  // action lors du clic sur la carte
   map.on("singleclick", function (evt) {
     // calcul de la distance point clique a point selectionne
     const viewResolution = view.getResolution();
     const selectFeature = geojsonSource.getClosestFeatureToCoordinate(evt.coordinate);
     const featureCoord = selectFeature.getGeometry().getCoordinates();
-    const dist = Math.sqrt((evt.coordinate[0]-featureCoord[0])**2 + (evt.coordinate[1]-featureCoord[1])**2);
+    const dist = Math.sqrt((evt.coordinate[0] - featureCoord[0]) ** 2 + (evt.coordinate[1] - featureCoord[1]) ** 2);
     // Test si le clic est dans ma sensibilite
-    if (dist <= viewResolution*sensiSelect) {
+    if (dist <= viewResolution * sensiSelect) {
       let featureName = selectFeature.getProperties().name;
       let featureImage = selectFeature.getProperties().image;
       let featureWebsite = selectFeature.getProperties().website;
       // Contenu de la popup
-      content.innerHTML = '<p>' + featureName + '</p><code><img src=./img/' + featureImage + ' alt="Image indisponible"> <br> <a href=' + featureWebsite + '>Lien vers le site web</a><br>Position : ' + featureCoord[0].toFixed(3) + ', ' + featureCoord[1].toFixed(3) + '</code>';
+      content.innerHTML = '<p>'
+        + featureName + '</p><code><img src=../data/img/'
+        + featureImage + ' alt="Image indisponible"> <br> <a href='
+        + featureWebsite + '>Lien vers le site web</a><br>Position : '
+        + featureCoord[0].toFixed(3) + ', '
+        + featureCoord[1].toFixed(3) + '</code>';
       overlay.setPosition(featureCoord);
     } else {
       console.log("Pas d'élément proche de la sélection.");
       overlay.setPosition(undefined);
     }
-  });  
+  });
 
   // fermer la fenetre lorsque clic sur la croix
   closer.onclick = function () {

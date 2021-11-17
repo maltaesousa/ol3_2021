@@ -9,55 +9,62 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css"
-  type="text/css">
+    type="text/css">
   <style>
     #map {
       height: 600px;
       width: 100%;
       background-color: lightgray;
     }
+
     .ol-popup {
-        position: absolute;
-        background-color: white;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #cccccc;
-        bottom: 12px;
-        left: -50px;
-        min-width: 280px;
-      }
-      .ol-popup:after, .ol-popup:before {
-        top: 100%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-      }
-      .ol-popup:after {
-        border-top-color: white;
-        border-width: 10px;
-        left: 48px;
-        margin-left: -10px;
-      }
-      .ol-popup:before {
-        border-top-color: #cccccc;
-        border-width: 11px;
-        left: 48px;
-        margin-left: -11px;
-      }
-      .ol-popup-closer {
-        text-decoration: none;
-        position: absolute;
-        top: 2px;
-        right: 8px;
-      }
-      .ol-popup-closer:after {
-        content: "✖";
-      }
-    </style>
+      position: absolute;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #cccccc;
+      bottom: 12px;
+      left: -50px;
+      min-width: 280px;
+    }
+
+    .ol-popup:after,
+    .ol-popup:before {
+      top: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .ol-popup:after {
+      border-top-color: white;
+      border-width: 10px;
+      left: 48px;
+      margin-left: -10px;
+    }
+
+    .ol-popup:before {
+      border-top-color: #cccccc;
+      border-width: 11px;
+      left: 48px;
+      margin-left: -11px;
+    }
+
+    .ol-popup-closer {
+      text-decoration: none;
+      position: absolute;
+      top: 2px;
+      right: 8px;
+    }
+
+    .ol-popup-closer:after {
+      content: "✖";
+    }
+  </style>
   </style>
 </head>
 
@@ -101,47 +108,47 @@
     integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <!-- Lien vers la librairie Proj4JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"
-  integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA=="
-  crossorigin="anonymous"></script>
+    integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA=="
+    crossorigin="anonymous"></script>
   <script>
-  // Pour utiliser proj4, on doit définir les projections souhaitées. Ici, juste 2056:
-  proj4.defs(
-    "EPSG:2056",
-    "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1"
-    + " +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs"
-  );
-  // ensuite, on doit dire à OpenLayers que notre proj4 est ok:
-  ol.proj.proj4.register(proj4);
+    // Pour utiliser proj4, on doit définir les projections souhaitées. Ici, juste 2056:
+    proj4.defs(
+      "EPSG:2056",
+      "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1"
+      + " +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs"
+    );
+    // ensuite, on doit dire à OpenLayers que notre proj4 est ok:
+    ol.proj.proj4.register(proj4);
 
-  // Création des l'overlay pour l'affichage de la fenêtre popup
-  const container= $('#popup')[0];
-  const content= $('#popup-content')[0];
-  const closer= $('#popup-closer')[0];
+    // Création des l'overlay pour l'affichage de la fenêtre popup
+    const container = $('#popup')[0];
+    const content = $('#popup-content')[0];
+    const closer = $('#popup-closer')[0];
 
-  const overlay = new ol.Overlay({
-    element: container,
-    autoPan: true,
-    autoPanAnimation: {
-      duration: 100,
-  },
-});
+    const overlay = new ol.Overlay({
+      element: container,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 100,
+      },
+    });
 
-  // Style de la couche
-  const style = new ol.style.Style({
-    image: new ol.style.Circle({
-    radius: 10,
-    fill: new ol.style.Fill({color: 'rgba(255, 255, 255, 0.9)'}),
-    stroke: new ol.style.Stroke({color: "blue", width: 4}),
+    // Style de la couche
+    const style = new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 10,
+        fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.9)' }),
+        stroke: new ol.style.Stroke({ color: "blue", width: 4 }),
       })
     });
-  // Couches vectorielles points
+    // Couches vectorielles points
     const vectorLayer = new ol.layer.Vector({
       style
-      });
-      const geojsonSource = new ol.source.Vector({
-        format: new ol.format.GeoJSON(),
-        url: "ol-3_popup.geojson"
-      });
+    });
+    const geojsonSource = new ol.source.Vector({
+      format: new ol.format.GeoJSON(),
+      url: "../data/ol-3_popup.geojson"
+    });
 
     // Par défaut, geojsonSource
     vectorLayer.setSource(geojsonSource);
@@ -156,16 +163,16 @@
     // Création de la constante `view` pour pouvoir y accéder ultérieurement
     const view = new ol.View({
       projection: "EPSG:2056",
-      center: [	2539050.0, 1180755.0],
+      center: [2539050.0, 1180755.0],
       zoom: 14
     });
 
     // Création de la carte avec un layer OSM et le vectorLayer vide
     const map = new ol.Map({
       target: "map",
-      layers: [backgroundLayer,vectorLayer],
+      layers: [backgroundLayer, vectorLayer],
       overlays: [overlay],
-    // ES6, équivaut à "view: view" en ES5
+      // ES6, équivaut à "view: view" en ES5
       view
     });
 
@@ -176,20 +183,25 @@
       view.setCenter(coord);
       view.setZoom(18);
     }
-    
+
     // Définition de la tolérance d'ouverture de la fenêtre pop-up
-    const sensiSelect=10
+    const sensiSelect = 10;
     map.on("singleclick", function (evt) {
-      
+
       const viewResolution = view.getResolution();
       const selectFeature = geojsonSource.getClosestFeatureToCoordinate(evt.coordinate);
       const featureCoord = selectFeature.getGeometry().getCoordinates();
-      const dist = Math.sqrt((evt.coordinate[0]-featureCoord[0])**2 + (evt.coordinate[1]-featureCoord[1])**2);
-      if (dist <= viewResolution*sensiSelect) {
+      const dist = Math.sqrt((evt.coordinate[0] - featureCoord[0]) ** 2 + (evt.coordinate[1] - featureCoord[1]) ** 2);
+      if (dist <= viewResolution * sensiSelect) {
         let nameCampus = selectFeature.getProperties().name;
         let websiteCampus = selectFeature.getProperties().website;
         let imageCampus = selectFeature.getProperties().image;
-        content.innerHTML = ''+ nameCampus +' 😑 <br> <code> <a href=' +websiteCampus+'>Lien vers le site web </a> <br> <img src=./img/'+imageCampus+' alt="Image"> <br> Position: '+featureCoord[0].toFixed(3)+' '+featureCoord[1].toFixed(3)+'</code>';
+        content.innerHTML = nameCampus
+         + ' 😑 <br> <code> <a href='
+         + websiteCampus + '>Lien vers le site web </a> <br> <img src=../data/img/'
+         + imageCampus + ' alt="Image"> <br> Position: '
+         + featureCoord[0].toFixed(3) + ' '
+         + featureCoord[1].toFixed(3) + '</code>';
         overlay.setPosition(featureCoord);
       } else {
         overlay.setPosition(undefined);
@@ -200,7 +212,7 @@
       overlay.setPosition(undefined);
       closer.blur();
       return false;
-};
+    };
   </script>
 </body>
 

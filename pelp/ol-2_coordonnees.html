@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>OpenLayers - Sélection du fond de plan</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.png" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css"
+      type="text/css">
+    <style>
+      #map {
+        height: 400px;
+        width: 50%;
+        background-color: lightgray;
+        color: blue;
+
+        font-weight: 1000;
+      }
+      #custom-mouse-position {
+        color: blue
+      }
+    </style>
+  </head>
+
+<body>
+  <h1>Affichage de coordonnées en temps réel</h1>
+  <p>Faites cet exercice sans Proj4js, restez en coordonnées WGS84.</p>
+  <ul>
+    <li>Créer une carte avec un fond de carte par défaut. Faites en sorte que la carte s'initialise en Suisse.</li>
+    <li>Afficher les coordonnées de la souris <a
+        href="https://openlayers.org/en/latest/apidoc/module-ol_control_MousePosition-MousePosition.html">ol.control.MousePosition()</a>
+      en coordonnées suisses</li>
+    <li>Styliser l'affichage des coordonnées. Soit sur la carte, dans ce cas vous créez une nouvelle CSS et vous lui
+      donnez votre CSS, soit en dehors de la carte, dans l'HTML.</li>
+    <li>Changer le format des coordonnées, par défaut, OpenLayers a tendance à mettre trop de chiffres après la virgule par exemple.</li>
+  </ul>
+
+  
+  <div id="map" class="map" >
+       
+  </div>
+  <div id="result-proj" class="pos_mouse" ">
+    
+  </div>
+  
+
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"
+  integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA=="
+  crossorigin="anonymous"></script>
+<script>
+    // blabla de projection, faudra vous y habituer :)
+    proj4.defs(
+    "EPSG:2056",
+    "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1"
+    + " +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs"
+    );
+    ol.proj.proj4.register(proj4);
+  
+
+  // Bing Maps
+  let bingRoad = new ol.layer.Tile({
+    name : "bingRoad",
+    visible : true,
+    source: new ol.source.BingMaps({
+      imagerySet: "Road",
+      key: "AkGbxXx6tDWf1swIhPJyoAVp06H0s0gDTYslNWWHZ6RoPqMpB9ld5FY1WutX8UoF"
+    })
+  });
+
+  let layers = [bingRoad]
+
+  const view = new ol.View({
+      center: ol.proj.fromLonLat([7, 47]),
+      zoom: 10
+    });
+
+  // Projection suisse
+  const projection = new ol.proj.Projection({
+  code: "EPSG:2056",
+  units: "m"
+  });
+
+
+
+  const map = new ol.Map({
+    target: "map", // l'id de l'élément HTML où on veut mettre la carte
+    layers:  layers,
+    view,
+    
+    })
+
+  const mousePositionControl = new ol.control.MousePosition({
+    projection: "EPSG:2056",
+    coordinateFormat: ol.coordinate.createStringXY(3),
+
+    // Pour positionner le texte en dessous
+    className: 'custom-mouse-position',
+    target: document.getElementById('result-proj'),
+    
+    
+  });
+
+
+  // Affichage du résultat
+  //$('#result-proj').html(`EPSG:4326 : <strong>${mousePositionControl}</strong>`);
+  $('#result-proj').show();
+
+
+
+  map.addControl(mousePositionControl);
+  
+
+</script>
+</body>
+
+
+
+
+
+
+</html>

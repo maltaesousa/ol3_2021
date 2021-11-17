@@ -1,0 +1,1 @@
+La décision de refaire la totalité des exercises le weekend du 06 au 07 novembre a été prise suite à un abandon et une énorme frustration provenant de grosses lacunes et d'une impression générale de singer vos exercises et exemples.

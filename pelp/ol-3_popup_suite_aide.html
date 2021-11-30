@@ -8,56 +8,61 @@
   <link rel="icon" href="img/favicon.png" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css"
-  type="text/css">
+    type="text/css">
   <style>
-      #map {
-        height: 600px;
-        width: 80%;}
+    #map {
+      height: 600px;
+      width: 80%;
+    }
 
-        .ol-popup {
-        position: absolute;
-        background-color: white;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #cccccc;
-        bottom: 12px;
-        left: -50px;
-        min-width: 280px;
-      }
-      .ol-popup:after, .ol-popup:before {
-        top: 100%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-      }
-      .ol-popup:after {
-        border-top-color: white;
-        border-width: 10px;
-        left: 48px;
-        margin-left: -10px;
-      }
-      .ol-popup:before {
-        border-top-color: #cccccc;
-        border-width: 11px;
-        left: 48px;
-        margin-left: -11px;
-      }
-      .ol-popup-closer {
-        text-decoration: none;
-        position: absolute;
-        top: 2px;
-        right: 8px;
-      }
-      .ol-popup-closer:after {
-        content: "✖";
-      }
+    .ol-popup {
+      position: absolute;
+      background-color: white;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #cccccc;
+      bottom: 12px;
+      left: -50px;
+      min-width: 280px;
+    }
+
+    .ol-popup:after,
+    .ol-popup:before {
+      top: 100%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .ol-popup:after {
+      border-top-color: white;
+      border-width: 10px;
+      left: 48px;
+      margin-left: -10px;
+    }
+
+    .ol-popup:before {
+      border-top-color: #cccccc;
+      border-width: 11px;
+      left: 48px;
+      margin-left: -11px;
+    }
+
+    .ol-popup-closer {
+      text-decoration: none;
+      position: absolute;
+      top: 2px;
+      right: 8px;
+    }
+
+    .ol-popup-closer:after {
+      content: "✖";
+    }
   </style>
 </head>
 
@@ -65,13 +70,13 @@
   <div class="container">
     <h1>Campus HEIG-VD</h1>
 
-    <div id="map" class="map" >
+    <div id="map" class="map">
 
-    <div id="popup" class="ol-popup">
+      <div id="popup" class="ol-popup">
         <a href="#" id="popup-closer" class="ol-popup-closer"></a>
         <div id="popup-content"></div>
-    </div>
-       
+      </div>
+
     </div>
 
     <p>
@@ -108,37 +113,32 @@
     integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js"
-  integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA=="
-  crossorigin="anonymous"></script>
+    integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA=="
+    crossorigin="anonymous"></script>
   <script>
-
-    const vectorLayer = new ol.layer.Vector({
-    });
+    const vectorLayer = new ol.layer.Vector({});
     const geojsonSource = new ol.source.Vector({
       format: new ol.format.GeoJSON(),
-      url: 'ol-3_popup.geojson'
+      url: '../data/ol-3_popup.geojson',
     });
 
-    // blabla de projection, faudra vous y habituer :)
     proj4.defs(
-    "EPSG:2056",
-    "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1"
-    + " +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs"
+      "EPSG:2056",
+      "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1"
+      + " +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs",
     );
     ol.proj.proj4.register(proj4);
-  
 
     // Bing Maps
-    let bingRoad = new ol.layer.Tile({
-      name : "bingRoad",
-      visible : true,
-      source: new ol.source.BingMaps({
-        imagerySet: "Road",
-        key: "AkGbxXx6tDWf1swIhPJyoAVp06H0s0gDTYslNWWHZ6RoPqMpB9ld5FY1WutX8UoF"
-      })
+    const backgroundLayer = new ol.layer.Tile({
+      opacity: 0.5,
+      id: 'background-layer',
+      source: new ol.source.XYZ({
+        url: 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg',
+      }),
     });
 
-    let layer = [bingRoad,vectorLayer]
+    const layers = [backgroundLayer, vectorLayer];
 
     const view = new ol.View({
       center: ol.proj.fromLonLat([6.64718, 46.78117]),
@@ -147,110 +147,86 @@
 
     // Projection suisse
     const projection = new ol.proj.Projection({
-    code: "EPSG:2056",
-    units: "m",
-    
+      code: "EPSG:2056",
+      units: "m",
     });
 
+    // TEST POPUP  https://openlayers.org/en/latest/examples/popup.html
+    const container = document.getElementById('popup');
+    const content = document.getElementById('popup-content');
+    const closer = document.getElementById('popup-closer');
 
-// Import des modules popup: En fait ils ne servent à rien ....
-toStringHDMS = new ol.coordinate.toStringHDMS({
-});
+    /**
+     * Create an overlay to anchor the popup to the map.
+     */
+    const overlay = new ol.Overlay({
+      element: container,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250,
+      },
+    });
 
-XYZ = new ol.source.XYZ({
-});
+    /**
+     * Add a click handler to hide the popup.
+     * @return {boolean} Don't follow the href.
+     */
+    closer.onclick = function () {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+    };
 
-toLonLat = new ol.proj.toLonLat({
-});
+    const map = new ol.Map({
+      target: "map", // l'id de l'élément HTML où on veut mettre la carte
+      layers,
+      view,
+      overlays: [overlay],
+    });
 
-Overlay = new ol.Overlay({
-});
+    // chargement de la couche de donnée geojsonSource
+    vectorLayer.setSource(geojsonSource);
 
+    // fonction pour arrondir les coordonnées :
+    function arrondir(valeur) {
+      const resultat = Math.round(valeur * 100) / 100;
+      return resultat;
+    }
 
-  //TEST POPUP  https://openlayers.org/en/latest/examples/popup.html
-  const container = document.getElementById('popup');
-  const content = document.getElementById('popup-content');
-  const closer = document.getElementById('popup-closer');
+    // fonction du choix de la radio sort le ID dans la console: 
+    function choisir_radio(element) {
+      if (element.checked) {
+        const site_XY = geojsonSource.getFeatureById(element.id).getGeometry().getCoordinates();
+        const site_name = geojsonSource.getFeatureById(element.id).getProperties().name;
+        const site_website = geojsonSource.getFeatureById(element.id).getProperties().website;
+        view.setCenter(site_XY);
 
-  /**
-   * Create an overlay to anchor the popup to the map.
-   */
-  const overlay = new ol.Overlay({
-  element: container,
-  autoPan: true,
-  autoPanAnimation: {
-  duration: 250,
-  },
-  });
-
-/**
- * Add a click handler to hide the popup.
- * @return {boolean} Don't follow the href.
- */
-  closer.onclick = function () {
-  overlay.setPosition(undefined);
-  closer.blur();
-  return false;
-};
-
-
-
-
-
-  const map = new ol.Map({
-    target: "map", // l'id de l'élément HTML où on veut mettre la carte
-    layers:  layer,
-    view,
-    overlays: [overlay],
-    })
-
-  
-
-
-  // chargement de la couche de donnée geojsonSource
-  vectorLayer.setSource(geojsonSource);
-
-  // fonction pour arrondir les coordonnées :
-  function arrondir(valeur){
-    const resultat = Math.round(valeur *100)/100
-    return resultat
-  }
-
-  
-  //fonction du choix de la radio sort le ID dans la console: 
-  function choisir_radio(element){
-  if (element.checked) {
-        
-        const site_XY = geojsonSource.getFeatureById(element.id).getGeometry().getCoordinates()
-        const site_name = geojsonSource.getFeatureById(element.id).getProperties().name
-        const site_website = geojsonSource.getFeatureById(element.id).getProperties().website
-        view.setCenter (site_XY)
-
-        const site_image = geojsonSource.getFeatureById(element.id).getProperties().image
-        const image_site = "img/"+site_image
+        const site_image = geojsonSource.getFeatureById(element.id).getProperties().image;
+        const image_site = "../data/img/" + site_image;
         const siteMN95 = ol.proj.transform(site_XY, 'EPSG:900913', 'EPSG:2056');
 
-        const Est_MN95 = arrondir(siteMN95[0])
-        const Nord_MN95 = arrondir(siteMN95[1])
+        const Est_MN95 = arrondir(siteMN95[0]);
+        const Nord_MN95 = arrondir(siteMN95[1]);
 
-        content.innerHTML = '<p>Site choisi : <strong>'+site_name+'</strong><br>Coordonnées MN95 : '+ Est_MN95 +' - '+ Nord_MN95 + '</p> <a class="doc" href= '+image_site+'  rel="lightbox"onclick="showLightbox(this); return false;"><img src="'+image_site+'"/></a> <a href='+site_website+'> Site internet </a>';
+        content.innerHTML = '<p>Site choisi : <strong>'
+          + site_name + '</strong><br>Coordonnées MN95 : '
+          + Est_MN95 + ' - '
+          + Nord_MN95
+          + '</p> <a class="doc" href= ' + image_site
+          + '  rel="lightbox"onclick="showLightbox(this); return false;"><img src="'
+          + image_site + '"/></a> <a href=' + site_website + '> Site internet </a>';
 
         overlay.setPosition(site_XY);
-        view.setZoom(16)
+        view.setZoom(16);
       }
     }
 
-// Affiche la coordonnée de la carte dans la console:
-map.on('singleclick', function (evt) {
-  const coordinate = evt.coordinate;
-    
-  const pointMN95 = ol.proj.transform(coordinate, 'EPSG:900913', 'EPSG:2056');  
-  console.log(pointMN95)})
-
-
-
-
-
+    // Affiche la coordonnée de la carte dans la console:
+    map.on('singleclick', function (evt) {
+      const coordinate = evt.coordinate;
+      const pointMN95 = ol.proj.transform(coordinate, 'EPSG:900913', 'EPSG:2056');
+      console.log(pointMN95);
+    });
   </script>
 
 </body>
